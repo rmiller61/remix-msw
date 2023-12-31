@@ -10,18 +10,24 @@ export const meta: MetaFunction = () => {
 };
 
 export const loader: LoaderFunction = async () => {
-  const response = await fetch('https://example.com/api/runtime', {
+  const response = await fetch('https://mock.shop/api', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
       query: `
-        query ListMovies {
-          movie {
-            title
+      query GetProduct {
+        product(id: "gid://shopify/Product/7982905098262") {
+          id
+          title
+          description
+          featuredImage {
+            id
+            url
           }
         }
+      }
       `,
     }),
   })

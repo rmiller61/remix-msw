@@ -33,4 +33,19 @@ export const handlers = [
       },
     })
   }),
+  graphql.query('GetProduct', () => {
+    return HttpResponse.json({
+      data: {
+        product: {
+            id: "gid://shopify/Product/7982905098262",
+            title: "Mocked Product Title",
+            description: "This isn't a real product, it's just a mock.",
+            featuredImage: {
+                id: "gid://shopify/ProductImage/39774600855574",
+                url: "https://cdn.shopify.com/s/files/1/0688/1755/1382/products/GreenMenscrew01.jpg?v=1675454919"
+            }
+        }
+    }
+    })
+  }),
 ]
