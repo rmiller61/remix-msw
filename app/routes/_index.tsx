@@ -1,4 +1,6 @@
-import type { MetaFunction } from "@remix-run/node";
+import type { MetaFunction, LoaderFunction } from "@remix-run/node";
+import { useLoaderData } from '@remix-run/react'
+import { json } from "@remix-run/node"; // or cloudflare/deno
 
 export const meta: MetaFunction = () => {
   return [
@@ -7,10 +9,36 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader: LoaderFunction = async () => {
+  const response = await fetch('https://example.com/api/runtime', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      query: `
+        query ListMovies {
+          movie {
+            title
+          }
+        }
+      `,
+    }),
+  })
+  const serverSideData = await response.json()
+
+  return json({
+    serverSideData,
+  })
+}
+
 export default function Index() {
+  const {serverSideData} = useLoaderData<typeof loader>()
+
   return (
     <div style={{ fontFamily: "system-ui, sans-serif", lineHeight: "1.8" }}>
       <h1>Welcome to Remix</h1>
+      <div>{JSON.stringify(serverSideData)}</div>
       <ul>
         <li>
           <a
